@@ -42,6 +42,89 @@ function prepararUploadArquivo() {
     abrirModal(idPendente);
 }
 
+/* =========================
+   PARTICULAS REVERBERANTES INTERATIVAS
+   ========================= */
+let ultimoMouse = 0;
+let ultimoTouch = 0;
+let ultimoX = null;
+let ultimoY = null;
+
+function alvoIgnorado(tag) {
+    return ["input", "button", "label", "textarea"].includes(tag.toLowerCase());
+}
+
+function criarParticulas(x, y, origem = "mouse") {
+    const cores = [
+        "#c97b63","#6b8fa3","#7e9c8c","#9c6b7a","#c9b27c",
+        "#f2b5a0","#a3d2c0","#d8a7b1","#f0d9a0"
+    ];
+
+    const quantidade = origem === "touch" ? 10 : 6;
+    const alcanceBase = origem === "touch" ? 10 : 8;
+
+    for (let i = 0; i < quantidade; i++) {
+        const p = document.createElement("span");
+        p.classList.add("particula");
+
+        p.style.left = `calc(${x}px)`;
+        p.style.top = `calc(${y}px)`;
+
+        const angulo = Math.random() * Math.PI * 2;
+        const distancia = Math.random() * alcanceBase + alcanceBase / 2;
+
+        const dx = Math.cos(angulo) * distancia + "rem";
+        const dy = Math.sin(angulo) * distancia + "rem";
+
+        p.style.setProperty("--dx", dx);
+        p.style.setProperty("--dy", dy);
+        p.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
+        p.style.opacity = origem === "touch" ? "0.85" : "0.65";
+
+        document.body.appendChild(p);
+
+        p.addEventListener("animationend", () => p.remove());
+    }
+}
+
+// Mouse move (distância mínima menor, mais frequente)
+document.addEventListener("mousemove", (e) => {
+    const agora = Date.now();
+
+    if (ultimoX === null || ultimoY === null) {
+        ultimoX = e.clientX;
+        ultimoY = e.clientY;
+        return;
+    }
+
+    const dx = e.clientX - ultimoX;
+    const dy = e.clientY - ultimoY;
+    const distancia = Math.sqrt(dx*dx + dy*dy);
+
+    const intervalo = agora - ultimoMouse > 350; // mais frequente
+    const acaso = Math.random() < 0.85;
+
+    if (distancia > 5 && intervalo && acaso && !alvoIgnorado(e.target.tagName)) {
+        criarParticulas(e.clientX, e.clientY, "mouse");
+        ultimoMouse = agora;
+    }
+
+    ultimoX = e.clientX;
+    ultimoY = e.clientY;
+});
+
+// Toque / clique (mais intenso, eco reverberante)
+document.addEventListener("pointerdown", (e) => {
+    if (!alvoIgnorado(e.target.tagName)) {
+        const agora = Date.now();
+        if (agora - ultimoTouch > 250) {
+            criarParticulas(e.clientX, e.clientY, "touch");
+            ultimoTouch = agora;
+        }
+    }
+});
+
+
 
 function abrirModal(id) {
     idPendente = id;
