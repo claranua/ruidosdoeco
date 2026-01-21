@@ -283,6 +283,31 @@ footer p:last-child {
     margin-bottom: 0;
 }
 
+/* =========================
+   PARTICULAS / PEDRAS INTERATIVAS
+   ========================= */
+.particula {
+    position: fixed;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1; /* atrás do conteúdo */
+    transform: translate(0,0) scale(0.3);
+    animation: espalhar 2.5s forwards ease-out;
+}
+
+@keyframes espalhar {
+    to {
+        transform: translate(var(--dx), var(--dy)) scale(1);
+        opacity: 0;
+    }
+}
+
+
+
+
+
 
 /* MODAL */
 #overlay {
