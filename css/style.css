@@ -341,6 +341,11 @@ footer p:last-child {
     line-height: 1.2; /* evita que o texto fique mais alto que o checkbox */
 }
 
+#modalTermo .texto-pequeno {
+    font-size: 0.9rem;
+    line-height: 1.25;
+}
+
 .checkbox-termo {
     display: flex;
     align-items: center; /* centraliza verticalmente checkbox e texto */
