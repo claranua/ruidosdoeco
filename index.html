@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="js/script.js" defer></script>
+        
+        <title>Ruídos do Eco</title>
+    </head>
+    <body>
+        <header></header>
+        <main>
+            <section>
+                <h1>Ruídos do Eco</h1>
+                <p>O Ruídos do Eco é um projeto artístico estruturado como um arquivo sonoro. <b>Acolhemos vozes, relatos e sons que nem sempre são reconhecidos ou ouvidos.</b></p>
+                <p>É um convite para nos deixarmos atravessar pelos ruídos, palavras e silêncios que compõem o nosso dia a dia.</p>
+                <p><b>Aqui não existe certo ou errado, apenas sons.</b> Com seus timbres variados, tecemos artes sonoras como forma de lidar com a crueza das vivências humanas.</p>
+            </section>
+            <section>
+                <section>
+                    <hr>
+                    <h2>Se quiser, envie seus ruídos</h2>
+                    <p>Pode ser um relato, desabafo, silêncio ou som do seu cotidiano. Algo gravado agora ou do seu próprio arquivo.</p>
+
+                    <div class="caixa-aviso">
+                        <p><strong>Duração recomendada:</strong> até 5 minutos para gravações feitas no navegador.</p>
+                        <p>Se quiser contar algo mais longo, você pode gravar no seu dispositivo e enviar como arquivo.</p>
+                    </div>
+
+                    <div class="bloco" id="Audio_Livre">
+                        <h3>Grave o que desejar</h3>
+                        <div class="botoes">
+                            <button onclick="iniciarGravacao('Audio_Livre')">🔴 Gravar</button>
+                            <button onclick="pararGravacao('Audio_Livre')" disabled>⏹️ Parar</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="bloco" id="Bloco_Upload">
+                        <h3>Ou envie um áudio do seu dispositivo</h3>
+                        <p>Selecione um arquivo:</p>
+                        <!-- O input de arquivo -->
+                        <div class="campo-arquivo">
+                            <label for="inputArquivo" class="botao-arquivo">
+                                Escolher arquivo
+                            </label>
+                            <span class="texto-arquivo">Nenhum arquivo selecionado</span>
+                            <input type="file" id="inputArquivo" accept="audio/*" hidden>
+                        </div>
+                        
+                        <div class="caixa-aviso">
+                            <p><strong>Formatos aceitos:</strong> .webm, .mp3, .wav ou .flac.</p>
+                        </div>
+                        
+                        <br>
+                        <input type="text" id="contextoAudio" placeholder="Descreva o som brevemente">
+                        <br><br>
+                        <!-- Este botão NÃO envia, ele apenas CHAMA o modal -->
+                        <button onclick="prepararUploadArquivo()">Validar e Enviar</button>
+                    </div>
+                    <hr>
+                </section>
+                <section>
+                    <h2>Expresse seus pensamentos sobre...</h2>
+                    <div class="bloco" id="CriarSemSaberIntencao">
+                        <p>Como é criar sem saber a intenção?</p>
+                        <div class="botoes">
+                            <button onclick="iniciarGravacao('CriarSemSaberIntencao')">🔴 Gravar</button>
+                            <button onclick="pararGravacao('CriarSemSaberIntencao')" disabled>⏹️ Parar</button>
+                        </div>
+                    </div>
+
+                    <div class="bloco" id="OQueInspira">
+                        <p>Como é ter ideias e não saber como colocá-las no mundo?</p>
+                        <div class="botoes">
+                            <button onclick="iniciarGravacao('OQueInspira')">🔴 Gravar</button>
+                            <button onclick="pararGravacao('OQueInspira')" disabled>⏹️ Parar</button>
+                        </div>
+                    </div>
+
+                    <div class="bloco" id="ComoFoiCrescer">
+                        <p>Como foi crescer?</p>
+                        <div class="botoes">
+                            <button onclick="iniciarGravacao('ComoFoiCrescer')">🔴 Gravar</button>
+                            <button onclick="pararGravacao('ComoFoiCrescer')" disabled>⏹️ Parar</button>
+                        </div>
+
+                    </div>
+
+                    <div class="bloco" id="OQueTeMachucouEnquantoCrescia">
+                        <p>O que te machucou enquanto você crescia?</p>
+                        <div class="botoes">
+                            <button onclick="iniciarGravacao('OQueTeMachucouEnquantoCrescia')">🔴 Gravar</button>
+                            <button onclick="pararGravacao('OQueTeMachucouEnquantoCrescia')" disabled>⏹️ Parar</button>
+                        </div>
+                    </div>
+                    <hr>
+                </section>
+                <section>
+                    <h3>Quer compartilhar um texto ou um arquivo mais longo?</h3>
+                    <p>Contate o email <b>ruidosdoeco@gmail.com</b> e faça o seu envio. Lembre-se de se identificar como deseja ser creditado.</p>
+                    <p>Ao enviar seu material para esse email, você concorda com o <a href="/pages/termo-consentimento.html" target="_blank" rel="noopener noreferrer">termo de consentimento</a> do Arquivo Ruídos do Eco. Ele poderá ser usado em ensaios sonoros, podcasts, álbuns e trechos públicos selecionados.</p>
+                </section>
+            </section>
+
+        </main>
+
+        <footer>
+            
+        </footer>
+                        <!-- Modal Único de Consentimento -->
+        <div id="overlay"></div>
+        <div id="modalTermo">
+            <input type="text" id="nomeUsuario" placeholder="Nome, apelido ou pseudônimo">
+            <p>Ao enviar seu áudio, você concorda com o <a href="/pages/termo-consentimento.html" target="_blank" rel="noopener noreferrer">termo de consentimento</a> do Arquivo Ruídos do Eco.</p>
+            <p>O seu áudio poderá ser usado em ensaios sonoros, podcasts, álbuns e trechos públicos selecionados. Você poderá ser creditado através do nome, apelido ou pseudônimo indicado ou permanecer anônimo.</p>
+            <div class="checkbox-termo">
+                <input type="checkbox" id="checkUnico">
+                <label for="checkUnico">Eu li e concordo.</label>
+            </div>
+            <br><br>
+            <button onclick="confirmarEnvio()" style="background: #28a745; color: white;">ENVIAR AGORA</button>
+            <button onclick="fecharModal()">Cancelar</button>
+        </div>
+    </body>
+</html>

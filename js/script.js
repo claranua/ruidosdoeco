@@ -1,0 +1,145 @@
+let mediaRecorder;
+let chunks = [];
+let audiosCache = {};
+let idPendente = null;
+const SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
+
+
+async function iniciarGravacao(id) {
+    chunks = [];
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = () => {
+    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    audiosCache[id] = new Blob(chunks, { type: 'audio/webm' });
+    abrirModal(id);
+};
+    mediaRecorder.start();
+    alternarBotoes(id, true);
+}
+
+function pararGravacao(id) {
+    mediaRecorder.stop();
+    alternarBotoes(id, false);
+}
+
+let arquivoParaUpload = null; // Variável global para armazenar o arquivo selecionado
+
+// 1. Função disparada ao clicar no botão "Validar e Enviar"
+function prepararUploadArquivo() {
+    const input = document.getElementById('inputArquivo');
+    
+    if (input.files.length === 0) {
+        return alert("Por favor, selecione um arquivo de áudio primeiro.");
+    }
+
+    // Armazena o arquivo na variável global e define o ID como 'Arquivo_Externo'
+    arquivoParaUpload = input.files[0];
+    idPendente = "Arquivo_Externo"; 
+    
+    // Abre o seu modal de consentimento existente
+    abrirModal(idPendente);
+}
+
+
+function abrirModal(id) {
+    idPendente = id;
+    document.getElementById('modalTermo').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+}
+
+function fecharModal() {
+    document.getElementById('modalTermo').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('nomeUsuario').value = "";
+    document.getElementById('checkUnico').checked = false;
+}
+
+const inputArquivo = document.getElementById("inputArquivo");
+const textoArquivo = document.querySelector(".texto-arquivo");
+
+inputArquivo.addEventListener("change", () => {
+    textoArquivo.textContent = inputArquivo.files.length
+        ? inputArquivo.files[0].name
+        : "Nenhum arquivo selecionado";
+});
+
+async function confirmarEnvio() {
+    const nome = document.getElementById('nomeUsuario').value.trim();
+    const contexto = document.getElementById('contextoAudio').value.trim(); // Captura o contexto
+    const aceitou = document.getElementById('checkUnico').checked;
+
+    if (!aceitou) return alert("Aceite o termo para enviar.");
+
+    const agora = new Date();
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+
+    const dataStr = agora.toLocaleDateString('pt-BR').replace(/\//g, '-') + "_" + horas + "h" + minutos;
+    
+    let arquivoFinal = (idPendente === "Arquivo_Externo")
+    ? document.getElementById('inputArquivo').files[0]
+    : audiosCache[idPendente];
+
+    if (!arquivoFinal) {
+        alert("Nenhum áudio encontrado para envio.");
+        return;
+    }
+
+    const nomeSeguro = nome || "anonimo";
+
+    let extensao = "webm";
+
+    if (idPendente === "Arquivo_Externo") {
+        extensao = arquivoFinal.type.split('/')[1] || 'audio';
+    }
+
+    const nomeFinal = `${nomeSeguro}_${idPendente}_${dataStr}.${extensao}`;
+
+    // Agora passamos o contexto para a função de envio
+    enviarParaDrive(arquivoFinal, nomeFinal, contexto);
+    fecharModal();
+    document.getElementById('contextoAudio').value = ""; // Limpa o campo
+}
+
+
+function limparCamposUpload() {
+    const input = document.getElementById('inputArquivo');
+    const texto = document.querySelector(".texto-arquivo");
+
+    input.value = "";
+    arquivoParaUpload = null;
+    texto.textContent = "Nenhum arquivo selecionado"; // volta ao texto padrão
+    document.getElementById('nomeUsuario').value = "";
+    document.getElementById('checkUnico').checked = false;
+    document.getElementById('contextoAudio').value = ""; // limpa o campo de contexto
+}
+
+
+function enviarParaDrive(blob, nomeArquivo, contexto) {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = async () => {
+        const base64 = reader.result.split(',')[1];
+        // Adicionamos 'description' ao payload
+        const payload = { 
+            base64: base64, 
+            fileName: nomeArquivo, 
+            mimeType: blob.type,
+            description: contexto 
+        };
+
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+            alert("Obrigada, o seu ruído foi recebido com sucesso!");
+            limparCamposUpload();
+        } catch (e) { alert("Erro ao enviar."); }
+    };
+}
+
+function alternarBotoes(id, gravando) {
+    const bloco = document.getElementById(id);
+    bloco.querySelectorAll('button')[0].disabled = gravando;
+    bloco.querySelectorAll('button')[1].disabled = !gravando;
+}

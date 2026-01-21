@@ -1,0 +1,317 @@
+/* RESET MÍNIMO */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 112.5%; /* base do rem (≈16px, mas adaptável) */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    /* font-family: "Courier New", Courier, monospace; */
+    /* font-family: "IBM Plex Mono", "Courier New", monospace; */
+    font-family: "Source Code Pro", "Courier New", monospace;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+
+    background-color: #f3efe7; /* areia / arquivo */
+    color: #2e2e2e;
+
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+strong, b {
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    font-style: italic;
+}
+
+a {
+    color: #1f1f1f; /* um pouco mais escuro que o texto normal */
+    text-decoration: underline; /* opcional, para indicar que é clicável */
+}
+
+a:hover {
+    color: #000; /* escurece um pouquinho ao passar o mouse */
+}
+
+/* Área principal de leitura */
+main {
+    max-width: 42.5rem; /* ~680px */
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem;
+}
+
+/* Títulos simples */
+h1 {
+    font-size: 2.1rem;
+    margin-bottom: 1.8rem;
+    padding-left: 0.6rem;
+}
+
+h2 {
+    font-size: 1.3rem;
+    margin: 2rem 0 1rem;
+}
+
+h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+}
+
+/* Parágrafos */
+p {
+    margin-bottom: 1.2em;
+}
+
+/* Linha de arquivo */
+hr {
+    border: none;
+    border-top: 1px solid #bbb;
+    margin: 2rem 0;
+}
+
+/* CAIXA DE AVISO/ RECOMENDAÇÃO */
+.caixa-aviso {
+    border: 0.06rem solid #999;      /* borda fina */
+    background-color: #faf8f4;       /* fundo suave tipo papel */
+    padding: 0.5rem 0.8rem;          /* espaço interno */
+    margin: 1rem 0;                  /* distância do resto do conteúdo */
+    font-size: 0.85rem;              /* texto menor */
+    color: #2e2e2e;                  /* cor do texto */
+    line-height: 1.4;
+}
+
+
+
+
+/* Botões crus */
+button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: transparent;
+    border: 1px solid #999;
+    padding: 0.6em 1em;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e8e3d9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* CONTÊINER DOS BOTÕES */
+.botoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.5rem 0;
+}
+
+/* BOTÕES */
+.botoes button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: transparent;
+    border: 1px solid #999;
+    padding: 0.6em 1em;
+    cursor: pointer;
+    min-width: 7.5rem;
+}
+
+.botoes button:hover {
+    background: #e8e3d9;
+}
+
+.botoes button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.campo-arquivo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: #faf8f4;
+    border: 0.0625rem solid #bbb;
+    padding: 0.4em 0.6em;
+    gap: 0.5em;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+/* botão à esquerda */
+.botao-arquivo {
+    font-family: inherit;
+    font-size: 0.85rem;
+    background: transparent;
+    border: 0.0625rem solid #999;
+    padding: 0.3em 0.7em;
+    cursor: pointer;
+    color: #2e2e2e;
+    white-space: nowrap;
+}
+
+/* hover sutil */
+.botao-arquivo:hover {
+    background: #e8e3d9;
+}
+
+/* texto ao lado do botão */
+.texto-arquivo {
+    color: #555;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1; /* ocupa o espaço restante */
+}
+
+
+@media (max-width: 40rem) {
+    .botoes {
+        gap: 0.5rem;
+    }
+
+    .botoes button {
+        min-width: auto;
+        padding: 0.75em 0.5em;
+    }
+}
+
+/* Inputs como fichas */
+input,
+textarea {
+    font-family: inherit;
+    background: #faf8f4;
+    border: 1px solid #bbb;
+    padding: 0.5rem;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* =========================
+   POSTS / BLOG
+   ========================= */
+#blog {
+    margin: 2rem 0;
+}
+
+   .postagem {
+    border: 0.06rem solid #999;      /* borda fina */
+    background-color: transparent;    /* fundo transparente */
+    padding: 0.8rem 1rem;            /* espaço interno */
+    margin-bottom: 1.5rem;           /* distância entre posts */
+    line-height: 1.5;
+}
+
+.postagem h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+}
+
+.postagem p {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.postagem a {
+    font-size: 0.9rem;
+    color: #1f1f1f; /* um pouco mais escuro que o texto normal */
+    text-decoration: underline;
+}
+
+.postagem a:hover {
+    color: #000; /* escurece ao passar o mouse */
+}
+
+/* Responsivo para telas pequenas */
+@media (max-width: 40rem) {
+    .postagem {
+        padding: 0.6rem 0.8rem;
+    }
+
+    .postagem h3 {
+        font-size: 1.1rem;
+    }
+
+    .postagem p {
+        font-size: 0.9rem;
+    }
+
+    .postagem a {
+        font-size: 0.85rem;
+    }
+}
+
+
+
+/* MODAL */
+#overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+#modalTermo {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.3);
+
+    width: 90%;
+    max-width: 25rem;
+    color: #333;
+
+    z-index: 1000;
+}
+
+#modalTermo label {
+    line-height: 1.2; /* evita que o texto fique mais alto que o checkbox */
+}
+
+.checkbox-termo {
+    display: flex;
+    align-items: center; /* centraliza verticalmente checkbox e texto */
+    gap: 0.5rem; /* espaço entre checkbox e texto */
+    margin: 0.5rem 0; /* distância do resto do conteúdo */
+}
+
+.checkbox-termo input[type="checkbox"] {
+    width: 1.2em;
+    height: 1.2em;
+    cursor: pointer;
+}
+
+.checkbox-termo label {
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
