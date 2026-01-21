@@ -42,8 +42,9 @@ function prepararUploadArquivo() {
     abrirModal(idPendente);
 }
 
+
 /* =========================
-   PARTICULAS REVERBERANTES INTERATIVAS
+   PARTICULAS / PEDRAS INTERATIVAS
    ========================= */
 let ultimoMouse = 0;
 let ultimoTouch = 0;
@@ -51,78 +52,76 @@ let ultimoX = null;
 let ultimoY = null;
 
 function alvoIgnorado(tag) {
-    return ["input", "button", "label", "textarea"].includes(tag.toLowerCase());
+    return ["input","button","label","textarea"].includes(tag.toLowerCase());
 }
 
 function criarParticulas(x, y, origem = "mouse") {
     const cores = [
-        "#c97b63","#6b8fa3","#7e9c8c","#9c6b7a","#c9b27c",
-        "#f2b5a0","#a3d2c0","#d8a7b1","#f0d9a0"
+        "rgba(200,180,160,1)",
+        "rgba(170,150,130,1)",
+        "rgba(150,140,125,1)",
+        "rgba(180,160,140,1)"
     ];
 
-    const quantidade = origem === "touch" ? 10 : 6;
-    const alcanceBase = origem === "touch" ? 10 : 8;
+    const quantidade = origem === "touch" ? 5 : 2; 
+    const alcanceBase = origem === "touch" ? 14 : 10;
 
-    for (let i = 0; i < quantidade; i++) {
+    for (let i=0; i<quantidade; i++){
         const p = document.createElement("span");
         p.classList.add("particula");
 
-        p.style.left = `calc(${x}px)`;
-        p.style.top = `calc(${y}px)`;
+        p.style.left = `${x}px`;
+        p.style.top = `${y}px`;
 
-        const angulo = Math.random() * Math.PI * 2;
-        const distancia = Math.random() * alcanceBase + alcanceBase / 2;
+        const angulo = Math.random()*Math.PI*2;
+        const distancia = Math.random()*alcanceBase + alcanceBase/2;
 
-        const dx = Math.cos(angulo) * distancia + "rem";
-        const dy = Math.sin(angulo) * distancia + "rem";
+        const dx = Math.cos(angulo)*distancia + "rem";
+        const dy = Math.sin(angulo)*distancia + "rem";
 
         p.style.setProperty("--dx", dx);
         p.style.setProperty("--dy", dy);
-        p.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
-        p.style.opacity = origem === "touch" ? "0.85" : "0.65";
+
+        p.style.backgroundColor = cores[Math.floor(Math.random()*cores.length)];
+        p.style.opacity = origem==="touch"? "0.85":"0.60";
 
         document.body.appendChild(p);
-
-        p.addEventListener("animationend", () => p.remove());
+        p.addEventListener("animationend", ()=> p.remove());
     }
 }
 
-// Mouse move (distância mínima menor, mais frequente)
-document.addEventListener("mousemove", (e) => {
+// Movimento do mouse
+document.addEventListener("mousemove",(e)=>{
     const agora = Date.now();
-
-    if (ultimoX === null || ultimoY === null) {
-        ultimoX = e.clientX;
-        ultimoY = e.clientY;
-        return;
-    }
+    if(ultimoX===null || ultimoY===null){ultimoX=e.clientX;ultimoY=e.clientY;return;}
 
     const dx = e.clientX - ultimoX;
     const dy = e.clientY - ultimoY;
     const distancia = Math.sqrt(dx*dx + dy*dy);
 
-    const intervalo = agora - ultimoMouse > 350; // mais frequente
-    const acaso = Math.random() < 0.85;
+    const intervalo = agora - ultimoMouse > 500;
+    const acaso = Math.random() < 0.45;
 
-    if (distancia > 5 && intervalo && acaso && !alvoIgnorado(e.target.tagName)) {
-        criarParticulas(e.clientX, e.clientY, "mouse");
+    if(distancia>3 && intervalo && acaso && !alvoIgnorado(e.target.tagName)){
+        criarParticulas(e.clientX,e.clientY,"mouse");
         ultimoMouse = agora;
     }
 
-    ultimoX = e.clientX;
-    ultimoY = e.clientY;
+    ultimoX=e.clientX;
+    ultimoY=e.clientY;
 });
 
-// Toque / clique (mais intenso, eco reverberante)
-document.addEventListener("pointerdown", (e) => {
-    if (!alvoIgnorado(e.target.tagName)) {
+// Toque / clique
+document.addEventListener("pointerdown",(e)=>{
+    if(!alvoIgnorado(e.target.tagName)){
         const agora = Date.now();
-        if (agora - ultimoTouch > 250) {
-            criarParticulas(e.clientX, e.clientY, "touch");
+        if(agora - ultimoTouch > 400){
+            criarParticulas(e.clientX,e.clientY,"touch");
             ultimoTouch = agora;
         }
     }
 });
+
 
 
 
