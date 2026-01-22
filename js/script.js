@@ -4,6 +4,31 @@ let audiosCache = {};
 let idPendente = null;
 const SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
 
+// Menu hambúrguer
+const hamburguer = document.getElementById('hamburguer');
+const navMenu = document.getElementById('nav-menu');
+
+if (hamburguer && navMenu) {
+    hamburguer.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navMenu.classList.toggle('ativa');
+    });
+    
+    // Fechar ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('header')) {
+            navMenu.classList.remove('ativa');
+        }
+    });
+    
+    // Fechar ao clicar em um link
+    navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+            navMenu.classList.remove('ativa');
+        });
+    });
+}
+
 // Navegação fluída para links .html existentes
 document.addEventListener('click', (e) => {
     const link = e.target.closest('a[href$=".html"]');
