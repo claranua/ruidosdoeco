@@ -4,6 +4,91 @@ let audiosCache = {};
 let idPendente = null;
 const SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
 
+// Navegação fluída para links .html existentes
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href$=".html"]');
+    if (!link || link.target === '_blank') return;
+    
+    e.preventDefault();
+    const url = link.getAttribute('href');
+    
+    const main = document.querySelector('main');
+    main.style.transition = 'opacity 0.2s ease';
+    main.style.opacity = '0';
+    
+    setTimeout(async () => {
+        try {
+            const response = await fetch(url);
+            const html = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newMain = doc.querySelector('main');
+            if (newMain) main.innerHTML = newMain.innerHTML;
+        } catch (e) {
+            window.location.href = url;
+            return;
+        }
+        
+        main.style.opacity = '1';
+        window.scrollTo(0, 0);
+    }, 200);
+});
+
+function handleNavClick(e) {
+    e.preventDefault();
+    const page = e.currentTarget.dataset.page;
+    carregarPagina(page);
+}
+
+async function carregarPagina(page) {
+    if (page === paginaAtual) return;
+    
+    const main = document.getElementById('conteudo-dinamico');
+    
+    // Fade out
+    main.classList.add('fade-out');
+    
+    setTimeout(async () => {
+        if (page === 'home') {
+            main.innerHTML = conteudoPrincipal.home;
+            paginaAtual = 'home';
+        } else if (page === 'termo') {
+            try {
+                const response = await fetch('pages/termo-consentimento.html');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const bodyContent = doc.body.innerHTML;
+                main.innerHTML = bodyContent;
+                paginaAtual = 'termo';
+            } catch (error) {
+                main.innerHTML = '<h1>Erro ao carregar a página</h1><p>Tente novamente.</p>';
+                console.error('Erro ao carregar página:', error);
+            }
+        }
+        
+        // Atualizar links de navegação
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('ativo');
+            if (link.dataset.page === page) {
+                link.classList.add('ativo');
+            }
+        });
+        
+        // Fade in
+        main.classList.remove('fade-out');
+        
+        // Scroll para o topo
+        window.scrollTo(0, 0);
+    }, 300);
+}
+
+// Suportar navegação com o histórico do navegador
+window.addEventListener('hashchange', () => {
+    const page = window.location.hash.slice(1) || 'home';
+    carregarPagina(page);
+});
+
 
 async function iniciarGravacao(id) {
     chunks = [];
@@ -138,13 +223,18 @@ function fecharModal() {
     document.getElementById('checkUnico').checked = false;
 }
 
-const inputArquivo = document.getElementById("inputArquivo");
-const textoArquivo = document.querySelector(".texto-arquivo");
-
-inputArquivo.addEventListener("change", () => {
-    textoArquivo.textContent = inputArquivo.files.length
-        ? inputArquivo.files[0].name
-        : "Nenhum arquivo selecionado";
+// Configurar input de arquivo ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+    const inputArquivo = document.getElementById("inputArquivo");
+    const textoArquivo = document.querySelector(".texto-arquivo");
+    
+    if (inputArquivo && textoArquivo) {
+        inputArquivo.addEventListener("change", () => {
+            textoArquivo.textContent = inputArquivo.files.length
+                ? inputArquivo.files[0].name
+                : "Nenhum arquivo selecionado";
+        });
+    }
 });
 
 async function confirmarEnvio() {
