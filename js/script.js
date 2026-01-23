@@ -48,7 +48,10 @@ document.addEventListener('click', (e) => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const newMain = doc.querySelector('main');
-            if (newMain) main.innerHTML = newMain.innerHTML;
+            if (newMain) {
+                main.innerHTML = newMain.innerHTML;
+                window.history.pushState({}, '', url);
+            }
         } catch (e) {
             window.location.href = url;
             return;
