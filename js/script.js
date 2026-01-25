@@ -35,7 +35,13 @@ document.addEventListener('click', (e) => {
     if (!link || link.target === '_blank') return;
     
     e.preventDefault();
-    const url = link.getAttribute('href');
+    let url = link.getAttribute('href');
+    
+    // Converter para caminho absoluto se for relativo
+    if (!url.startsWith('/')) {
+        const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        url = basePath + '/' + url;
+    }
     
     const main = document.querySelector('main');
     main.style.transition = 'opacity 0.2s ease';
