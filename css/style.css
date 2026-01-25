@@ -76,6 +76,18 @@ header nav a:hover {
 }
 
 @media (max-width: 40rem) {
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+    
+    body {
+        padding-top: 3.5rem;
+    }
+
     .hamburguer {
         display: block;
     }
