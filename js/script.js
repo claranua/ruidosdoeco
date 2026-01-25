@@ -29,18 +29,32 @@ if (hamburguer && navMenu) {
     });
 }
 
-// Navegação fluída para links .html existentes
+// Navegação fluída para links internos
 document.addEventListener('click', (e) => {
-    const link = e.target.closest('a[href$=".html"]');
+    const link = e.target.closest('a');
     if (!link || link.target === '_blank') return;
     
+    const href = link.getAttribute('href');
+    // Só interceptar links internos (começam com / ou não têm protocolo)
+    if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return;
+    
     e.preventDefault();
-    let url = link.getAttribute('href');
+    let url = href;
+    
+    // Se for raiz (/), fetch de /index.html
+    if (url === '/') {
+        url = '/index.html';
+    }
     
     // Converter para caminho absoluto se for relativo
     if (!url.startsWith('/')) {
         const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
         url = basePath + '/' + url;
+    }
+    
+    // Adicionar /index.html se for uma pasta
+    if (!url.endsWith('.html') && !url.endsWith('/')) {
+        url = url + '/index.html';
     }
     
     const main = document.querySelector('main');
@@ -56,7 +70,9 @@ document.addEventListener('click', (e) => {
             const newMain = doc.querySelector('main');
             if (newMain) {
                 main.innerHTML = newMain.innerHTML;
-                window.history.pushState({}, '', url);
+                // Mostrar a URL limpa no browser (sem /index.html)
+                let displayUrl = url.replace(/\/index\.html$/, '') || '/';
+                window.history.pushState({}, '', displayUrl);
             }
         } catch (e) {
             window.location.href = url;
