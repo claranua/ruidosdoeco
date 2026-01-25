@@ -68,8 +68,13 @@ document.addEventListener('click', (e) => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const newMain = doc.querySelector('main');
+            const newTitle = doc.querySelector('title');
             if (newMain) {
                 main.innerHTML = newMain.innerHTML;
+                // Atualizar título da página
+                if (newTitle) {
+                    document.title = newTitle.textContent;
+                }
                 // Mostrar a URL limpa no browser (sem /index.html)
                 let displayUrl = url.replace(/\/index\.html$/, '') || '/';
                 window.history.pushState({}, '', displayUrl);
