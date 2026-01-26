@@ -109,7 +109,7 @@ async function carregarPagina(page) {
             paginaAtual = 'home';
         } else if (page === 'termo') {
             try {
-                const response = await fetch('pages/termo-consentimento.html');
+                const response = await fetch('/termo-consentimento');
                 const html = await response.text();
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
