@@ -176,7 +176,7 @@ function prepararUploadArquivo() {
 
     // Armazena o arquivo na variável global e define o ID como 'Arquivo_Externo'
     arquivoParaUpload = input.files[0];
-    idPendente = "Arquivo_Externo"; 
+    idPendente = "ArquivoExterno"; 
     
     // Abre o seu modal de consentimento existente
     abrirModal(idPendente);
@@ -305,7 +305,7 @@ async function confirmarEnvio() {
 
     const dataStr = agora.toLocaleDateString('pt-BR').replace(/\//g, '-') + "_" + horas + "h" + minutos;
     
-    let arquivoFinal = (idPendente === "Arquivo_Externo")
+    let arquivoFinal = (idPendente === "ArquivoExterno")
     ? document.getElementById('inputArquivo').files[0]
     : audiosCache[idPendente];
 
@@ -318,7 +318,7 @@ async function confirmarEnvio() {
 
     let extensao = "webm";
 
-    if (idPendente === "Arquivo_Externo") {
+    if (idPendente === "ArquivoExterno") {
         extensao = arquivoFinal.type.split('/')[1] || 'audio';
     }
 
