@@ -2,7 +2,7 @@ let mediaRecorder;
 let chunks = [];
 let audiosCache = {};
 let idPendente = null;
-const SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEpp2JTEuaIriFj2N0DgIYuLP8Bx21JRRaIMVOF0wioqMrFaMNVmHzmoQ6UzBWCp4wVQ/exec";
 
 // Menu hambúrguer
 const hamburguer = document.getElementById('hamburguer');
